@@ -1,0 +1,65 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AABBC001-1111-4444-8888-000000000001}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniWms.Domain", "src\MiniWms.Domain\MiniWms.Domain.csproj", "{AABBC002-1111-4444-8888-000000000002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniWms.Application", "src\MiniWms.Application\MiniWms.Application.csproj", "{AABBC003-1111-4444-8888-000000000003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniWms.Infrastructure", "src\MiniWms.Infrastructure\MiniWms.Infrastructure.csproj", "{AABBC004-1111-4444-8888-000000000004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniWms.Api", "src\MiniWms.Api\MiniWms.Api.csproj", "{AABBC005-1111-4444-8888-000000000005}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AABBC007-1111-4444-8888-000000000007}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniWms.Infrastructure.Tests", "tests\MiniWms.Infrastructure.Tests\MiniWms.Infrastructure.Tests.csproj", "{AABBC006-1111-4444-8888-000000000006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniWms.Application.Tests", "tests\MiniWms.Application.Tests\MiniWms.Application.Tests.csproj", "{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniWms.Api.IntegrationTests", "tests\MiniWms.Api.IntegrationTests\MiniWms.Api.IntegrationTests.csproj", "{77797D85-3BD8-44B1-A315-C426DBFEC596}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AABBC002-1111-4444-8888-000000000002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBC002-1111-4444-8888-000000000002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBC002-1111-4444-8888-000000000002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBC002-1111-4444-8888-000000000002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABBC003-1111-4444-8888-000000000003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBC003-1111-4444-8888-000000000003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBC003-1111-4444-8888-000000000003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBC003-1111-4444-8888-000000000003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABBC004-1111-4444-8888-000000000004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBC004-1111-4444-8888-000000000004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBC004-1111-4444-8888-000000000004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBC004-1111-4444-8888-000000000004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABBC005-1111-4444-8888-000000000005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBC005-1111-4444-8888-000000000005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBC005-1111-4444-8888-000000000005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBC005-1111-4444-8888-000000000005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABBC006-1111-4444-8888-000000000006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBC006-1111-4444-8888-000000000006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBC006-1111-4444-8888-000000000006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBC006-1111-4444-8888-000000000006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77797D85-3BD8-44B1-A315-C426DBFEC596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77797D85-3BD8-44B1-A315-C426DBFEC596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77797D85-3BD8-44B1-A315-C426DBFEC596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77797D85-3BD8-44B1-A315-C426DBFEC596}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AABBC002-1111-4444-8888-000000000002} = {AABBC001-1111-4444-8888-000000000001}
+		{AABBC003-1111-4444-8888-000000000003} = {AABBC001-1111-4444-8888-000000000001}
+		{AABBC004-1111-4444-8888-000000000004} = {AABBC001-1111-4444-8888-000000000001}
+		{AABBC005-1111-4444-8888-000000000005} = {AABBC001-1111-4444-8888-000000000001}
+		{AABBC006-1111-4444-8888-000000000006} = {AABBC007-1111-4444-8888-000000000007}
+		{C5AB7C72-43C1-4FC5-8337-BB1D53C3E396} = {AABBC007-1111-4444-8888-000000000007}
+		{77797D85-3BD8-44B1-A315-C426DBFEC596} = {AABBC007-1111-4444-8888-000000000007}
+	EndGlobalSection
+EndGlobal

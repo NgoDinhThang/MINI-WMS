@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NUnit" Version="4.4.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MiniWms.Application\MiniWms.Application.csproj" />
+    <ProjectReference Include="..\..\src\MiniWms.Domain\MiniWms.Domain.csproj" />
+  </ItemGroup>
+</Project>

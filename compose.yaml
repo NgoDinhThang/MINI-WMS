@@ -1,0 +1,29 @@
+name: miniwms
+
+services:
+  redis:
+    image: redis:8.2.10-alpine
+    container_name: miniwms-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - 128mb
+      - --maxmemory-policy
+      - noeviction
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-e", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+    name: miniwms-redis-data

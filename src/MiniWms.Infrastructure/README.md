@@ -1,0 +1,26 @@
+# MiniWms.Infrastructure
+
+Contains EF Core persistence and authentication implementations for PostgreSQL transactions, Redis sessions, Identity password verification, JWT issuance, and opaque refresh credentials. Business/PostgresWarehouseStore.cs implements catalog queries/creation and warehouse-locked inventory transactions; StaffPasswordHasher wraps Identity password hashing. See docs/BUSINESS_API.md and the root README for current stock workflows and verification.
+References `MiniWms.Application` and `MiniWms.Domain` directly because the EF configurations map Domain entities.
+
+`Persistence/WmsDbContext.cs` exposes the nine ERD tables and two durable authentication tables and applies the Fluent API mappings in `Persistence/Configurations/`. PostgreSQL is selected through Npgsql with EF Core 8. Model tests inspect the resulting metadata and SQL without connecting to a database.
+
+All nine tables have required `CreatedAt`/`UpdatedAt` columns mapped to `timestamp with time zone`, adding eighteen audit columns to the forty-three original business fields. The context accepts an optional `TimeProvider` and stamps a single UTC instant for both fields on insertion. On update it preserves the original `CreatedAt` and refreshes `UpdatedAt`; unchanged/deleted rows are unaffected. Insert/backfill defaults use `CURRENT_TIMESTAMP`. This is context-level auditing: direct SQL and `ExecuteUpdate` must maintain `UpdatedAt` explicitly.
+
+`DependencyInjection.AddInfrastructure` registers `WmsDbContext` with a scoped lifetime using Npgsql. Api supplies its configured `ConnectionStrings:WmsDatabase` at the composition root. This registration does not open a connection or apply migrations.
+
+`Persistence/WmsDbContextFactory.cs` supports EF commands. It reads `ConnectionStrings__WmsDatabase` directly from the environment. If it is absent, a password-free local connection (`Host=127.0.0.1;Port=5432;Database=mini_wms;Username=postgres`) permits model inspection and migration generation without a database connection. Database updates require valid credentials. The factory does not read API User Secrets.
+
+PostgreSQL 18.6 is running locally on port 5432. The `mini_wms` database has owner `postgres` and UTF8 encoding. Reviewed migrations `20261021164214_InitialCreate` and `20261022164820_AddAuditTimestamps` are applied, creating nine business tables plus EF migration history and adding eighteen audit columns. The original migration is preserved. Live checks confirmed 61 user-defined columns, including all eighteen required timestamp columns with `CURRENT_TIMESTAMP` defaults.
+
+`Persistence/Seeding` contains deterministic development fixtures and `MockDataSeeder`. Api's explicit Development-only `--seed-mock-data` command uses a fresh context, one transaction, a transaction-scoped advisory lock, and table locks. It accepts empty tables with optional canonical Admin/Staff roles, or skips a complete matching fixture by counts, keys, and identifying values. Partial/conflicting/unrelated data are refused, and reruns preserve existing passwords, timestamps, and edits.
+
+The fixture has two roles, four users (one Admin, three Staff including one inactive), ten products (two inactive), three warehouses (one inactive), three inbound documents/twelve lines, two outbound documents/six lines, and ten stock pairs calculated from those movements. Passwords come from `MockData:AdminPassword`/`MockData:StaffPassword` configuration and are stored using ASP.NET Core Identity's password hasher. No API login or business workflow is implemented by this seeder.
+
+The database contains all 52 fixture rows. Live checks verified row counts, valid audit timestamps with equal initial creation/update values, exactly one Admin, four Identity password hashes, and nonnegative balances matching the document ledger. Rerunning the explicit seed command skipped the fixture; a checksum comparison confirmed no persisted values, passwords, or audit timestamps changed. Initial mock passwords were generated securely and stored in Development User Secrets, outside source control.
+
+Restore and the Release build passed with zero warnings/errors; all 25 NUnit model/audit/fixture tests passed. These historical baseline checks preceded the implemented business services. Current real-provider tests verify stock transactions and concurrency; see the root README for the latest totals.
+
+The repository-local `dotnet-ef` tool and private EF Core Design references use version 8.0.32. Follow the root [README](../../README.md) for local SDK/environment setup, connection configuration, and explicit migration commands. Do not use `EnsureCreated` or apply migrations at API startup. See [AGENTS.md](../../AGENTS.md) and [DATABASE_DESIGN.md](../../docs/DATABASE_DESIGN.md) for architecture and model constraints.
+
+Authentication adds Users.AuthVersion and audited AuthSessions/RefreshTokens. Per-user PostgreSQL row locks serialize session changes, PostgreSQL preserves consumed refresh hashes, and atomic Redis scripts manage the current session. See ../../docs/AUTHENTICATION.md and the root README for current endpoint and test results. Historical schema/fixture checks above describe the original nine-table baseline.

@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\MiniWms.Domain\MiniWms.Domain.csproj" />
+  </ItemGroup>
+</Project>

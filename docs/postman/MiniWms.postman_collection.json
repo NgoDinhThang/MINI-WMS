@@ -1,0 +1,1893 @@
+{
+    "info":  {
+                 "name":  "MINI WMS - Core API",
+                 "_postman_id":  "8a4a0eb9-1b1a-4675-8e0c-f856b1faf6ca",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+                 "description":  "Authentication and all core warehouse endpoints. Set Admin email/password locally. Business flow - run in order creates review data and tests receipts, issues, inventory counts, Staff creation and ban/unban. Security folders deliberately revoke sessions. Password and token variable defaults are empty."
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://localhost:5080",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "email",
+                         "value":  "admin@mini-wms.test",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "staffEmail",
+                         "value":  "staff1@mini-wms.test",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "password",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "staffPassword",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "targetStaffId",
+                         "value":  "00000002-0000-0000-0000-000000000002",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "accessToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "refreshToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "previousAccessToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "previousRefreshToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "adminAccessToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "staffAccessToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "productId",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "warehouseId",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "newStaffPassword",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "createdStaffId",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "createdStaffEmail",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "businessStaffAccessToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "businessStaffRefreshToken",
+                         "value":  "",
+                         "type":  "string"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "Public status",
+                     "item":  [
+                                  {
+                                      "name":  "API status",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Liveness",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/health"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "OpenAPI - Development only",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/swagger/v1/swagger.json"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Authentication",
+                     "item":  [
+                                  {
+                                      "name":  "Login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousAccessToken\", pm.collectionVariables.get(\"accessToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Current account",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{accessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/me"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Refresh token pair",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/refresh",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousRefreshToken\", pm.collectionVariables.get(\"refreshToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Logout",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/logout",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));",
+                                                                                    "if (pm.response.code === 204) { pm.collectionVariables.set(\"accessToken\", \"\"); pm.collectionVariables.set(\"refreshToken\", \"\"); }"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Invalid password",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"intentionally-invalid-password\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));",
+                                                                                    "pm.test(\"ProblemDetails has traceId\", () =\u003e pm.expect(pm.response.json().traceId).to.be.a(\"string\"));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Staff account state - Admin",
+                     "description":  "Use Admin email/password and set targetStaffId. This folder bans then unbans Staff; the Staff account is left active but requires a fresh login.",
+                     "item":  [
+                                  {
+                                      "name":  "Admin login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousAccessToken\", pm.collectionVariables.get(\"accessToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Ban Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff/{{targetStaffId}}/ban"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Unban Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff/{{targetStaffId}}/unban"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Staff login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{staffPassword}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Staff cannot ban",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{staffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff/{{targetStaffId}}/ban"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 403\", () =\u003e pm.response.to.have.status(403));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Security checks - intentionally revokes sessions",
+                     "description":  "Run in order. The second login invalidates the first. Replaying a consumed refresh token then revokes the current family; sign in again afterwards.",
+                     "item":  [
+                                  {
+                                      "name":  "Login before replacement",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousAccessToken\", pm.collectionVariables.get(\"accessToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Replace login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousAccessToken\", pm.collectionVariables.get(\"accessToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Reject previous access token",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{previousAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/me"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Rotate refresh token",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/refresh",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.collectionVariables.set(\"previousRefreshToken\", pm.collectionVariables.get(\"refreshToken\") || \"\");"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) {",
+                                                                                    " const b = pm.response.json();",
+                                                                                    " pm.collectionVariables.set(\"accessToken\", b.accessToken);",
+                                                                                    " pm.collectionVariables.set(\"refreshToken\", b.refreshToken);",
+                                                                                    " if (b.user.role === \"Admin\") pm.collectionVariables.set(\"adminAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"staffAccessToken\", b.accessToken);",
+                                                                                    " if (b.user.role === \"Staff\") pm.collectionVariables.set(\"targetStaffId\", b.user.userId);",
+                                                                                    " pm.test(\"Access expiry stays within the session\", () =\u003e pm.expect(Date.parse(b.accessTokenExpiresAt)).to.be.at.most(Date.parse(b.sessionExpiresAt)));",
+                                                                                    "}"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Replay consumed refresh token",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/refresh",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"refreshToken\": \"{{previousRefreshToken}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Reject access after replay revocation",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "description":  "",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{accessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/me"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Business flow - run in order",
+                     "description":  "Run from the first request with Admin email/password configured. Creates persistent review data. Tokens and identifiers are captured locally. Requires real PostgreSQL and Redis.",
+                     "item":  [
+                                  {
+                                      "name":  "1. Login Admin",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.collectionVariables.set(\"adminAccessToken\", pm.response.json().accessToken);"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "2. Create product",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/products",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"sku\": \"REVIEW-{{$guid}}\",\n  \"name\": \"Review product\",\n  \"description\": \"Created by Postman business flow\",\n  \"isActive\": true\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 201\", () =\u003e pm.response.to.have.status(201));",
+                                                                                    "if (pm.response.code === 201) pm.collectionVariables.set(\"productId\", pm.response.json().productId);"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "3. Create warehouse",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/warehouses",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"code\": \"REVIEW-{{$guid}}\",\n  \"name\": \"Review warehouse\",\n  \"address\": \"Review address\",\n  \"isActive\": true\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 201\", () =\u003e pm.response.to.have.status(201));",
+                                                                                    "if (pm.response.code === 201) pm.collectionVariables.set(\"warehouseId\", pm.response.json().warehouseId);"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "4. Create Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"review-{{$guid}}@mini-wms.test\",\n  \"fullName\": \"Review Staff\",\n  \"password\": \"{{newStaffPassword}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "prerequest",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "if (!pm.collectionVariables.get(\"newStaffPassword\")) pm.collectionVariables.set(\"newStaffPassword\", (pm.variables.replaceIn(\"{{$guid}}\") + pm.variables.replaceIn(\"{{$guid}}\")).replace(/-/g, \"\"));"
+                                                                                ]
+                                                                   }
+                                                    },
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 201\", () =\u003e pm.response.to.have.status(201));",
+                                                                                    "if (pm.response.code === 201) pm.collectionVariables.set(\"createdStaffId\", pm.response.json().userId);",
+                                                                                    "if (pm.response.code === 201) pm.collectionVariables.set(\"createdStaffEmail\", pm.response.json().email);",
+                                                                                    "if (pm.response.code === 201) pm.test(\"Role is Staff\", () =\u003e pm.expect(pm.response.json().role).to.equal(\"Staff\"));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Login new Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{createdStaffEmail}}\",\n  \"password\": \"{{newStaffPassword}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.collectionVariables.set(\"businessStaffAccessToken\", pm.response.json().accessToken);",
+                                                                                    "if (pm.response.code === 200) pm.collectionVariables.set(\"businessStaffRefreshToken\", pm.response.json().refreshToken);"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "List active products",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/products?isActive=true\u0026page=1\u0026pageSize=50"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "List active warehouses",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/warehouses?isActive=true\u0026page=1\u0026pageSize=50"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Check initial quantity zero",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory?productId={{productId}}\u0026warehouseId={{warehouseId}}"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Exact balance is 0\", () =\u003e pm.expect(pm.response.json().items[0].quantity).to.equal(0));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Receive 10.500",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inbound-receipts",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"receiptCode\": \"IN-{{$guid}}\",\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"receivedAt\": \"{{$isoTimestamp}}\",\n  \"note\": \"Review inbound\",\n  \"lines\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 10.5\n    }\n  ]\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 201\", () =\u003e pm.response.to.have.status(201));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Issue 3.250",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/outbound-receipts",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"receiptCode\": \"OUT-{{$guid}}\",\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"recipientName\": \"Review customer\",\n  \"issuedAt\": \"{{$isoTimestamp}}\",\n  \"note\": \"Review outbound\",\n  \"lines\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 3.25\n    }\n  ]\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 201\", () =\u003e pm.response.to.have.status(201));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Check remaining 7.250",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory?productId={{productId}}\u0026warehouseId={{warehouseId}}"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Exact balance is 7.25\", () =\u003e pm.expect(pm.response.json().items[0].quantity).to.equal(7.25));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Reject issue above available stock",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/outbound-receipts",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"receiptCode\": \"OUT-{{$guid}}\",\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"recipientName\": \"Review customer\",\n  \"issuedAt\": \"{{$isoTimestamp}}\",\n  \"lines\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 100\n    }\n  ]\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 409\", () =\u003e pm.response.to.have.status(409));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Check failed issue left stock unchanged",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory?productId={{productId}}\u0026warehouseId={{warehouseId}}"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Exact balance is 7.25\", () =\u003e pm.expect(pm.response.json().items[0].quantity).to.equal(7.25));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Deny Staff stock adjustment",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory/adjustments",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 5\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 403\", () =\u003e pm.response.to.have.status(403));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Admin sets physical count to 5",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory/adjustments",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 5\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Absolute count changed 7.25 to 5\", () =\u003e { const b = pm.response.json(); pm.expect(b.previousQuantity).to.equal(7.25); pm.expect(b.quantity).to.equal(5); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Check count is now 5",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory?productId={{productId}}\u0026warehouseId={{warehouseId}}"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Exact balance is 5\", () =\u003e pm.expect(pm.response.json().items[0].quantity).to.equal(5));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Ban newly created Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff/{{createdStaffId}}/ban"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Banned Staff token denied",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/products"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Unban newly created Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{adminAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/staff/{{createdStaffId}}/unban"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Old token remains denied after unban",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/products"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 401\", () =\u003e pm.response.to.have.status(401));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Login new Staff again after unban",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/login",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{createdStaffEmail}}\",\n  \"password\": \"{{newStaffPassword}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.collectionVariables.set(\"businessStaffAccessToken\", pm.response.json().accessToken);",
+                                                                                    "if (pm.response.code === 200) pm.collectionVariables.set(\"businessStaffRefreshToken\", pm.response.json().refreshToken);"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Fresh login can read stock",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{businessStaffAccessToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               },
+                                                      "url":  "{{baseUrl}}/inventory?productId={{productId}}\u0026warehouseId={{warehouseId}}"
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 200\", () =\u003e pm.response.to.have.status(200));",
+                                                                                    "if (pm.response.code === 200) pm.test(\"Exact balance is 5\", () =\u003e pm.expect(pm.response.json().items[0].quantity).to.equal(5));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Logout newly created Staff",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "url":  "{{baseUrl}}/auth/logout",
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"refreshToken\": \"{{businessStaffRefreshToken}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"HTTP 204\", () =\u003e pm.response.to.have.status(204));"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 }
+             ]
+}

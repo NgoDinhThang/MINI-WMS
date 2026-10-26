@@ -1,0 +1,143 @@
+@baseUrl = http://localhost:5080
+@email = staff1@mini-wms.test
+@password = REPLACE_WITH_YOUR_CONFIGURED_STAFF_PASSWORD
+@accessToken = REPLACE_WITH_ACCESS_TOKEN
+@refreshToken = REPLACE_WITH_CURRENT_REFRESH_TOKEN
+@staffUserId = 00000002-0000-0000-0000-000000000002
+@productId = REPLACE_WITH_PRODUCT_ID
+@warehouseId = REPLACE_WITH_WAREHOUSE_ID
+@initialStaffPassword = REPLACE_WITH_LOCAL_INITIAL_PASSWORD
+
+### Public liveness
+GET {{baseUrl}}/health
+
+### Development OpenAPI
+GET {{baseUrl}}/swagger/v1/swagger.json
+Accept: application/json
+
+### Login; copy tokens locally or use the Postman collection to capture them
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Current account (valid current bearer session)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+### Rotate once; replace BOTH local credentials with this response
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Logout using the CURRENT refresh token; bearer token is unnecessary
+POST {{baseUrl}}/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Ban Staff (use an Admin access token)
+POST {{baseUrl}}/staff/{{staffUserId}}/ban
+Authorization: Bearer {{accessToken}}
+
+### Unban Staff (use an Admin access token; Staff must log in again)
+POST {{baseUrl}}/staff/{{staffUserId}}/unban
+Authorization: Bearer {{accessToken}}
+
+
+### List products (Admin or Staff)
+GET {{baseUrl}}/products?isActive=true&page=1&pageSize=50
+Authorization: Bearer {{accessToken}}
+
+### List warehouses (Admin or Staff)
+GET {{baseUrl}}/warehouses?isActive=true&page=1&pageSize=50
+Authorization: Bearer {{accessToken}}
+
+### Exact inventory lookup (Admin or Staff; an unrecorded existing pair returns zero)
+GET {{baseUrl}}/inventory?productId={{productId}}&warehouseId={{warehouseId}}
+Authorization: Bearer {{accessToken}}
+
+### Create product (Admin; copy productId from the response)
+POST {{baseUrl}}/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "sku": "REVIEW-PRODUCT-01",
+  "name": "Review product",
+  "description": "Optional description",
+  "isActive": true
+}
+
+### Create warehouse (Admin; copy warehouseId from the response)
+POST {{baseUrl}}/warehouses
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "REVIEW-WAREHOUSE-01",
+  "name": "Review warehouse",
+  "address": "Warehouse address",
+  "isActive": true
+}
+
+### Receive goods (Admin or Staff)
+POST {{baseUrl}}/inbound-receipts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "receiptCode": "IN-REVIEW-01",
+  "warehouseId": "{{warehouseId}}",
+  "receivedAt": "2026-10-27T08:00:00Z",
+  "note": "Review receipt",
+  "lines": [
+    { "productId": "{{productId}}", "quantity": 10.500 }
+  ]
+}
+
+### Issue goods (Admin or Staff)
+POST {{baseUrl}}/outbound-receipts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "receiptCode": "OUT-REVIEW-01",
+  "warehouseId": "{{warehouseId}}",
+  "recipientName": "Review customer",
+  "issuedAt": "2026-10-27T09:00:00Z",
+  "note": "Review issue",
+  "lines": [
+    { "productId": "{{productId}}", "quantity": 3.250 }
+  ]
+}
+
+### Set absolute physical count (Admin)
+POST {{baseUrl}}/inventory/adjustments
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "warehouseId": "{{warehouseId}}",
+  "productId": "{{productId}}",
+  "quantity": 5
+}
+
+### Create Staff (Admin; role is always Staff; initial password must contain 12-128 characters)
+POST {{baseUrl}}/staff
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "email": "review.staff@mini-wms.test",
+  "fullName": "Review Staff",
+  "password": "{{initialStaffPassword}}"
+}
