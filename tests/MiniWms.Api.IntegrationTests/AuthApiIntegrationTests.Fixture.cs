@@ -21,6 +21,7 @@ using Role = MiniWms.Domain.Entities.Role;
 namespace MiniWms.Api.IntegrationTests;
 
 [TestFixture]
+[Category("Integration")]
 [NonParallelizable]
 public sealed partial class AuthApiIntegrationTests
 {

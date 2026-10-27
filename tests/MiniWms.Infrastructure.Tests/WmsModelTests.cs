@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace MiniWms.Infrastructure.Tests;
 
 [TestFixture]
+[Category("Unit")]
 public sealed class WmsModelTests
 {
     private static readonly Dictionary<Type, (string Table, string[] Properties)> ErdContract = new()

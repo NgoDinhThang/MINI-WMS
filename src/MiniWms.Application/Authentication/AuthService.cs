@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using MiniWms.Domain.Entities;
 
@@ -99,10 +100,6 @@ public sealed class AuthService : IAuthService
         var session = await transaction.FindSessionAsync(persistedToken.SessionId, cancellationToken);
         var now = UtcNow();
         if (!IsCurrentDurableSession(user, session, now) || persistedToken.ExpiresAt <= now)
-        {
-            throw InvalidSession();
-        }
-        if (session is null)
         {
             throw InvalidSession();
         }
@@ -283,7 +280,7 @@ public sealed class AuthService : IAuthService
         ExpiresAt = session.ExpiresAt
     };
 
-    private static bool IsCurrentDurableSession(User user, AuthSession? session, DateTimeOffset now) =>
+    private static bool IsCurrentDurableSession(User user, [NotNullWhen(true)] AuthSession? session, DateTimeOffset now) =>
         session is not null && session.UserId == user.UserId && session.AuthVersion == user.AuthVersion &&
         session.RevokedAt is null && session.ExpiresAt > now;
 

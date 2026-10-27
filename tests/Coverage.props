@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Include>[MiniWms.*]*</Include>
+    <Exclude>[*.Tests]*,[*.IntegrationTests]*</Exclude>
+    <ExcludeByFile>**/*.Designer.cs,**/*ModelSnapshot.cs</ExcludeByFile>
+    <CoverletOutputFormat>json,cobertura</CoverletOutputFormat>
+    <SkipAutoProps>false</SkipAutoProps>
+    <IncludeTestAssembly>false</IncludeTestAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Update="Moq" PrivateAssets="all" />
+    <PackageReference Update="coverlet.msbuild" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

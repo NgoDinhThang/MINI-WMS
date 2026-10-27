@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace MiniWms.Application.Tests;
 
 [TestFixture]
+[Category("Unit")]
 public sealed class AuthServiceTests
 {
     private AuthTestHarness harness = new();

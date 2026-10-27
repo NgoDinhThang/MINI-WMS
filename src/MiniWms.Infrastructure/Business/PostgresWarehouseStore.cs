@@ -73,10 +73,16 @@ public sealed class PostgresWarehouseStore(WmsDbContext context, ILogger<Postgre
             var projected = from balance in query
                             join product in context.Products on balance.ProductId equals product.ProductId
                             join warehouse in context.Warehouses on balance.WarehouseId equals warehouse.WarehouseId
-                            select new StockDto(balance.WarehouseId, warehouse.Code, balance.ProductId, product.SKU, product.Name, balance.Quantity);
+                            select new
+                            {
+                                balance.WarehouseId, WarehouseCode = warehouse.Code, balance.ProductId,
+                                product.SKU, ProductName = product.Name, balance.Quantity
+                            };
             var total = await projected.CountAsync(ct);
             var rows = await projected.OrderBy(s => s.WarehouseCode).ThenBy(s => s.SKU)
-                .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .Select(s => new StockDto(s.WarehouseId, s.WarehouseCode, s.ProductId, s.SKU, s.ProductName, s.Quantity))
+                .ToListAsync(ct);
             return new PageResult<StockDto>(rows, total, page, pageSize);
         });
 
@@ -187,7 +193,7 @@ public sealed class PostgresWarehouseStore(WmsDbContext context, ILogger<Postgre
         }
     }
 
-    private sealed class StockTransaction(
+    internal sealed class StockTransaction(
         PostgresWarehouseStore owner, WmsDbContext context, IDbContextTransaction transaction,
         Warehouse? warehouse, IReadOnlyDictionary<Guid, Product> products, Dictionary<Guid, StockBalance> balances) : IStockTransaction
     {

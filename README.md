@@ -150,17 +150,19 @@ Windows-host ping, read/write, TTL expiration, and persistence through a normal 
 ```powershell
 dotnet restore MiniWms.sln
 dotnet build MiniWms.sln -c Release --no-restore
-dotnet test MiniWms.sln -c Release --no-build
-.\scripts\Test-AuthIntegration.ps1 -NoBuild
+dotnet test MiniWms.sln -c Release --no-build --filter "TestCategory=Unit"
+.\scripts\Test-AuthIntegration.ps1 -NoBuild -Filter "TestCategory=Integration"
+dotnet tool restore
+.\scripts\Test-Coverage.ps1
 ```
 
-`MiniWms.Infrastructure.Tests` inspects mappings/generated PostgreSQL SQL, deterministic auditing, fixture integrity/password hashing, and real JWT/refresh-token adapters without a database connection. `MiniWms.Application.Tests` isolates orchestration with store/clock doubles.
+`MiniWms.Infrastructure.Tests` inspects mappings/generated PostgreSQL SQL, deterministic auditing, fixture integrity/password hashing, and real JWT/refresh-token adapters without a database connection. `MiniWms.Application.Tests` isolates orchestration with strict Moq mocks and existing transactional store/clock doubles.
 
-`MiniWms.Api.IntegrationTests` uses real PostgreSQL and Redis. Its helper loads local connection settings, creates a disposable `miniwms_auth_tests_<guid>` database, applies migrations, uses a unique Redis prefix, and removes only its own database/keys afterward. The PostgreSQL account therefore needs database-creation permission. CI can supply `MINIWMS_TEST_POSTGRES` and `MINIWMS_TEST_REDIS` directly. Without PostgreSQL test configuration, normal solution testing explicitly skips this integration fixture; the helper runs it with real services.
+`MiniWms.Api.IntegrationTests` contains Unit-category API boundary/host tests using Moq and Integration-category tests using real PostgreSQL and Redis. Its helper loads local connection settings, creates a disposable `miniwms_auth_tests_<guid>` database, applies migrations, uses a unique Redis prefix, and removes only its own database/keys afterward. The PostgreSQL account therefore needs database-creation permission. CI can supply `MINIWMS_TEST_POSTGRES` and `MINIWMS_TEST_REDIS` directly. Without PostgreSQL test configuration, normal solution testing explicitly skips this integration fixture; the helper runs it with real services.
 
 Coverage includes persisted refresh rotation, older-token replay, login replacement, cross-instance concurrent logins, concurrent refresh, login/refresh versus ban, old-session logout and delayed Redis cleanup, failed Redis revocation followed by unban, JWT validation, permission boundaries, fixed session expiry, and dependency outages. Business coverage includes complete goods-issue persistence, all-or-nothing multiline rollback, inactive/missing references, first-balance creation across hosts, oversell protection, concurrent count/movement ordering, duplicate codes across warehouses, quantity overflow, physical counts, Staff creation and role boundaries, filters, and Swagger.
 
-Verification completed: Release and an isolated-output Debug build had zero warnings/errors (the normal Debug output was locked by the running API; stop that instance before rebuilding there); all 122 tests passed with no skipped tests when real services were configured (33 Infrastructure, 49 Application, 40 API integration). EF reported no pending model changes. A separate temporary API process verified the actual seeded Admin/Staff credentials, inactive-account denial, refresh rotation, logout, and Swagger; that process was stopped afterward.
+Verification completed: Release and an isolated-output Debug build had zero warnings/errors (the normal Debug output was locked by the running API; stop that instance before rebuilding there); all 494 tests passed without skips: 203 Application unit, 149 Infrastructure unit, 62 API unit, and 80 real PostgreSQL/Redis integration tests. The enforced combined coverage gate passes at 100% line, branch, and method coverage for all four source assemblies. Domain/Application also reach 100% with unit tests alone; the complete Infrastructure/API result includes real-provider integration tests. Only EF-generated Designer/model-snapshot files are excluded. See [testing and coverage](docs/TESTING.md). EF reported no pending model changes. A separate temporary API process verified the actual seeded Admin/Staff credentials, inactive-account denial, refresh rotation, logout, and Swagger; that process was stopped afterward.
 
 ## Open in Visual Studio
 

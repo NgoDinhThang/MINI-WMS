@@ -40,29 +40,19 @@ public sealed class OpaqueRefreshTokenCodec : IRefreshTokenCodec
 
         var parts = token.Split('.');
         if (parts.Length != 3 || !Guid.TryParseExact(parts[0], "N", out var userId) || userId == Guid.Empty ||
-            !Guid.TryParseExact(parts[1], "N", out var tokenId) || tokenId == Guid.Empty || parts[2].Length != SecretCharacters ||
+            !Guid.TryParseExact(parts[1], "N", out var tokenId) || tokenId == Guid.Empty ||
             parts[2].Any(character => !char.IsAsciiLetterOrDigit(character) && character is not ('-' or '_')))
         {
             return null;
         }
 
-        byte[] secret;
-        try
-        {
-            secret = Base64UrlEncoder.DecodeBytes(parts[2]);
-        }
-        catch (FormatException)
-        {
-            return null;
-        }
-        catch (ArgumentException)
-        {
-            return null;
-        }
+        // The exact total length and two N-form GUIDs imply a 43-character secret.
+        // With the validated Base64Url alphabet, decoding always yields 32 bytes.
+        var secret = Base64UrlEncoder.DecodeBytes(parts[2]);
 
         try
         {
-            if (secret.Length != SecretBytes || !string.Equals(Base64UrlEncoder.Encode(secret), parts[2], StringComparison.Ordinal))
+            if (!string.Equals(Base64UrlEncoder.Encode(secret), parts[2], StringComparison.Ordinal))
             {
                 return null;
             }

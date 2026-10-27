@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace MiniWms.Application.Tests;
 
 [TestFixture]
+[Category("Unit")]
 public sealed class WarehouseServiceTests
 {
     private TestStore store = null!;

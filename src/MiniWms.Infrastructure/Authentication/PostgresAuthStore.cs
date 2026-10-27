@@ -50,6 +50,7 @@ public sealed class PostgresAuthStore(WmsDbContext context, ILogger<PostgresAuth
         }
         context.ChangeTracker.Clear();
         IDbContextTransaction? transaction = null;
+        var ownershipTransferred = false;
         try
         {
             transaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
@@ -60,24 +61,30 @@ public sealed class PostgresAuthStore(WmsDbContext context, ILogger<PostgresAuth
                 // Keep FOR UPDATE away from a nullable navigation join; fetch the role after locking Users.
                 await context.Entry(user).Reference(account => account.Role).LoadAsync(cancellationToken);
             }
-            return new PostgresAuthTransaction(context, transaction, user, logger);
+            var result = new PostgresAuthTransaction(context, transaction, user, logger);
+            ownershipTransferred = true;
+            return result;
         }
-        catch (Exception exception)
+        catch (Exception exception) when (IsPersistenceFailure(exception))
         {
-            if (transaction is not null)
+            throw Unavailable("lock account", exception);
+        }
+        finally
+        {
+            // The adapter owns a successfully returned transaction. Failed setup retains
+            // ownership here, including non-database failures and cancellation.
+            if (!ownershipTransferred)
             {
-                try { await transaction.DisposeAsync(); }
-                catch (Exception cleanupException) when (IsPersistenceFailure(cleanupException))
+                if (transaction is not null)
                 {
-                    logger.LogWarning("Authentication transaction cleanup failed ({ExceptionType}).", cleanupException.GetType().Name);
+                    try { await transaction.DisposeAsync(); }
+                    catch (Exception cleanupException) when (IsPersistenceFailure(cleanupException))
+                    {
+                        logger.LogWarning("Authentication transaction cleanup failed ({ExceptionType}).", cleanupException.GetType().Name);
+                    }
                 }
+                context.ChangeTracker.Clear();
             }
-            context.ChangeTracker.Clear();
-            if (IsPersistenceFailure(exception))
-            {
-                throw Unavailable("lock account", exception);
-            }
-            throw;
         }
     }
 
@@ -94,7 +101,7 @@ public sealed class PostgresAuthStore(WmsDbContext context, ILogger<PostgresAuth
         (exception is InvalidOperationException && exception.InnerException is not null &&
             IsPersistenceFailure(exception.InnerException));
 
-    private sealed class PostgresAuthTransaction(
+    internal sealed class PostgresAuthTransaction(
         WmsDbContext context,
         IDbContextTransaction transaction,
         User? user,

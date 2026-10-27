@@ -66,3 +66,5 @@ Redis command timeouts and PostgreSQL's five-second authentication lock timeout 
 | Tests | Application doubles/unit tests, Infrastructure adapter/model tests, and real-provider API integration tests |
 
 The API integration suite creates a guarded disposable PostgreSQL database and uses a unique Redis prefix. It verifies actual persisted sessions/consumed hashes and outcomes under concurrency, replay, dependency outages, and failed revocation. The fixture checks its configured database before sending requests and deletes only its own resources. Warehouse business-flow integration tests are now implemented in the same isolated fixture; see BUSINESS_API.md for stock and account-creation coverage.
+
+See [TESTING.md](TESTING.md) for the Moq suite, separate Unit/Integration categories, generated HTML reports, and the enforced 100% line/branch/method coverage gate. Coverage does not change the revocation boundary described above.

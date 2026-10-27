@@ -28,10 +28,11 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<ProductDto> CreateProductAsync(CreateProductRequest? request, CancellationToken ct)
     {
+        request ??= new CreateProductRequest(null, null);
         var product = new Product
         {
-            SKU = Code(request?.SKU, "sku"), Name = Text(request?.Name, "name", 200),
-            Description = OptionalText(request?.Description, "description", 2000), IsActive = request?.IsActive ?? true
+            SKU = Code(request.SKU, "sku"), Name = Text(request.Name, "name", 200),
+            Description = OptionalText(request.Description, "description", 2000), IsActive = request.IsActive
         };
         await store.AddProductAsync(product, ct);
         return new(product.ProductId, product.SKU, product.Name, product.Description, product.IsActive);
@@ -39,10 +40,11 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<WarehouseDto> CreateWarehouseAsync(CreateWarehouseRequest? request, CancellationToken ct)
     {
+        request ??= new CreateWarehouseRequest(null, null, null);
         var warehouse = new Warehouse
         {
-            Code = Code(request?.Code, "code"), Name = Text(request?.Name, "name", 200),
-            Address = Text(request?.Address, "address", 500), IsActive = request?.IsActive ?? true
+            Code = Code(request.Code, "code"), Name = Text(request.Name, "name", 200),
+            Address = Text(request.Address, "address", 500), IsActive = request.IsActive
         };
         await store.AddWarehouseAsync(warehouse, ct);
         return new(warehouse.WarehouseId, warehouse.Code, warehouse.Name, warehouse.Address, warehouse.IsActive);
@@ -50,13 +52,14 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<StaffDto> CreateStaffAsync(CreateStaffRequest? request, CancellationToken ct)
     {
-        var email = Text(request?.Email, "email", 254).ToLowerInvariant();
+        request ??= new CreateStaffRequest(null, null, null);
+        var email = Text(request.Email, "email", 254).ToLowerInvariant();
         if (!MailAddress.TryCreate(email, out var address) || !string.Equals(address.Address, email, StringComparison.Ordinal))
         {
             throw BusinessException.Invalid("email", "A valid email address is required.");
         }
-        var name = Text(request?.FullName, "fullName", 200);
-        var password = request?.Password;
+        var name = Text(request.FullName, "fullName", 200);
+        var password = request.Password;
         if (string.IsNullOrWhiteSpace(password) || password.Length is < 12 or > 128)
         {
             throw BusinessException.Invalid("password", "The initial password must contain 12 to 128 characters.");
@@ -69,8 +72,9 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<ReceiptDto> CreateInboundAsync(CreateInboundRequest? request, Guid actorId, CancellationToken ct)
     {
-        var input = ValidateMovement(request?.ReceiptCode, request?.WarehouseId ?? Guid.Empty,
-            request?.ReceivedAt, request?.Lines, request?.Note, actorId);
+        request ??= new CreateInboundRequest(null, Guid.Empty, null, null);
+        var input = ValidateMovement(request.ReceiptCode, request.WarehouseId,
+            request.ReceivedAt, request.Lines, request.Note, actorId);
         await using var transaction = await store.BeginStockChangeAsync(input.WarehouseId, input.Lines.Select(l => l.ProductId).ToArray(), ct);
         ValidateReferences(transaction, input.Lines);
         var receipt = new InboundReceipt
@@ -95,9 +99,10 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<ReceiptDto> CreateOutboundAsync(CreateOutboundRequest? request, Guid actorId, CancellationToken ct)
     {
-        var input = ValidateMovement(request?.ReceiptCode, request?.WarehouseId ?? Guid.Empty,
-            request?.IssuedAt, request?.Lines, request?.Note, actorId);
-        var recipient = Text(request?.RecipientName, "recipientName", 200);
+        request ??= new CreateOutboundRequest(null, Guid.Empty, null, null, null);
+        var input = ValidateMovement(request.ReceiptCode, request.WarehouseId,
+            request.IssuedAt, request.Lines, request.Note, actorId);
+        var recipient = Text(request.RecipientName, "recipientName", 200);
         await using var transaction = await store.BeginStockChangeAsync(input.WarehouseId, input.Lines.Select(l => l.ProductId).ToArray(), ct);
         ValidateReferences(transaction, input.Lines);
         // Calculate every resulting balance before changing any tracked quantities.
@@ -124,11 +129,12 @@ public sealed class WarehouseService(IWarehouseStore store, IStaffPasswordHasher
 
     public async Task<AdjustmentDto> AdjustStockAsync(AdjustStockRequest? request, CancellationToken ct)
     {
-        var warehouseId = request?.WarehouseId ?? Guid.Empty;
-        var productId = request?.ProductId ?? Guid.Empty;
+        request ??= new AdjustStockRequest(Guid.Empty, Guid.Empty, null);
+        var warehouseId = request.WarehouseId;
+        var productId = request.ProductId;
         RequireId(warehouseId, "warehouseId");
         RequireId(productId, "productId");
-        if (request?.Quantity is not decimal quantity || !StockRules.IsValidQuantity(quantity, true))
+        if (request.Quantity is not decimal quantity || !StockRules.IsValidQuantity(quantity, true))
         {
             throw BusinessException.Invalid("quantity", "A nonnegative quantity with at most 3 decimal places and 15 integer digits is required.");
         }

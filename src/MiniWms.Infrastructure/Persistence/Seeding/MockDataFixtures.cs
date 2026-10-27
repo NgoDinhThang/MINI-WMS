@@ -93,16 +93,7 @@ public static class MockDataFixtures
                 Accumulate(receipt.WarehouseId, line.ProductId, -line.Quantity);
             }
         }
-        var stocks = movementTotals.Select(pair => new StockBalance
-        {
-            WarehouseId = pair.Key.WarehouseId,
-            ProductId = pair.Key.ProductId,
-            Quantity = pair.Value
-        }).ToArray();
-        if (stocks.Any(stock => stock.Quantity < 0))
-        {
-            throw new InvalidOperationException("The development fixture ledger produces negative stock.");
-        }
+        var stocks = BuildStockBalances(movementTotals);
 
         return new MockDataSet(roles, users, products, warehouses, inbounds, inboundLines,
             outbounds, outboundLines, stocks);
@@ -179,4 +170,20 @@ public static class MockDataFixtures
 
     private static Guid Key(int category, int number) =>
         Guid.Parse($"{category:00000000}-0000-0000-0000-{number:000000000000}");
+
+    internal static IReadOnlyList<StockBalance> BuildStockBalances(
+        IReadOnlyDictionary<(Guid WarehouseId, Guid ProductId), decimal> movementTotals)
+    {
+        var stocks = movementTotals.Select(pair => new StockBalance
+        {
+            WarehouseId = pair.Key.WarehouseId,
+            ProductId = pair.Key.ProductId,
+            Quantity = pair.Value
+        }).ToArray();
+        if (stocks.Any(stock => stock.Quantity < 0))
+        {
+            throw new InvalidOperationException("The development fixture ledger produces negative stock.");
+        }
+        return stocks;
+    }
 }

@@ -40,9 +40,10 @@ public static class AuthenticationRegistration
         services.AddSingleton(policy);
         services.TryAddSingleton<TimeProvider>(TimeProvider.System);
         services.TryAddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.TryAddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
         services.AddSingleton<IConnectionMultiplexer>(provider =>
         {
-            try { return ConnectionMultiplexer.Connect(redisOptions); }
+            try { return provider.GetRequiredService<IRedisConnectionFactory>().Connect(redisOptions); }
             catch (Exception exception) when (exception is RedisException or TimeoutException)
             {
                 provider.GetRequiredService<ILogger<RedisAuthSessionStore>>()

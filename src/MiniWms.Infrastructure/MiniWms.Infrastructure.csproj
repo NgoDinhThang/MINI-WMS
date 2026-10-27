@@ -14,4 +14,8 @@
     <PackageReference Include="StackExchange.Redis" Version="3.4.20" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="MiniWms.Infrastructure.Tests" />
+    <InternalsVisibleTo Include="MiniWms.Api.IntegrationTests" />
+  </ItemGroup>
 </Project>

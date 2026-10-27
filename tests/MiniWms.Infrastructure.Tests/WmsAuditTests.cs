@@ -9,6 +9,7 @@ using NUnit.Framework;
 namespace MiniWms.Infrastructure.Tests;
 
 [TestFixture]
+[Category("Unit")]
 public sealed class WmsAuditTests
 {
     private static readonly DateTimeOffset OriginalTime = new(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);

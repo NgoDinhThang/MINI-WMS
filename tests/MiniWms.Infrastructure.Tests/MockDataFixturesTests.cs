@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace MiniWms.Infrastructure.Tests;
 
 [TestFixture]
+[Category("Unit")]
 public sealed class MockDataFixturesTests
 {
     private static readonly MockDataOptions TestPasswords = new()

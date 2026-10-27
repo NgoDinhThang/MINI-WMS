@@ -6,7 +6,15 @@
       "version": "8.0.32",
       "commands": [
         "dotnet-ef"
-      ]
+      ],
+      "rollForward": false
+    },
+    "dotnet-reportgenerator-globaltool": {
+      "version": "5.5.1",
+      "commands": [
+        "reportgenerator"
+      ],
+      "rollForward": false
     }
   }
 }

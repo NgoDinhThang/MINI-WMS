@@ -46,9 +46,11 @@ public sealed class MockDataSeeder(WmsDbContext context, IPasswordHasher<User> p
             return new MockDataSeedResult(true, counts);
         }
 
-        if (counts.Users != 0 || counts.Products != 0 || counts.Warehouses != 0 ||
-            counts.InboundReceipts != 0 || counts.InboundReceiptDetails != 0 ||
-            counts.OutboundReceipts != 0 || counts.OutboundReceiptDetails != 0 || counts.StockBalances != 0)
+        if (new[]
+            {
+                counts.Users, counts.Products, counts.Warehouses, counts.InboundReceipts,
+                counts.InboundReceiptDetails, counts.OutboundReceipts, counts.OutboundReceiptDetails, counts.StockBalances
+            }.Any(count => count != 0))
         {
             throw ExistingDataException();
         }
